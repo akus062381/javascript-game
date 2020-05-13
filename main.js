@@ -2,7 +2,7 @@
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
 
-
+// class Game {
 
 let player = {
     x: 210 + Math.floor(Math.random() * 160),
@@ -18,7 +18,7 @@ let target = {
     } 
 }
 
-class enemy {
+class Enemy {
     constructor() {
         this.x = 190 + Math.floor(Math.random() * 181),
         this.y = 60 + Math.floor(Math.random() * 60),
@@ -44,17 +44,38 @@ class enemy {
             }    }
     }
 
-let e1 = new enemy() 
-let e2 = new enemy()
+let e1 = new Enemy() 
+let e2 = new Enemy()
 setInterval (loop, 33);
+
+// **colliding()** returns true if two passed bodies are colliding.
+// The approach is to test for five situations.  If any are true,
+// the bodies are definitely not colliding.  If none of them
+// are true, the bodies are colliding.
+// 1. b1 is the same body as b2.
+// 2. Right of `b1` is to the left of the left of `b2`.
+// 3. Bottom of `b1` is above the top of `b2`.
+// 4. Left of `b1` is to the right of the right of `b2`.
+// 5. Top of `b1` is below the bottom of `b2`.
+function colliding (b1, b2) {
+    return !(
+      b1 === b2 ||
+          b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+          b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+          b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+          b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2
+    )
+  }
 
 
 function collisionEnemyOne(e1, player) {
-    if((e1.x + e1.width) >= player.x &&
-        e1.x <= (player.x + player.width) &&
-        (e1.y + e1.height) >= player.y &&
-        e1.y <= (player.y + player.height))  
-        console.log("you lose the game")
+    if ( 
+        // e1.x + e1.width / 2 < player.x - player.width / 2 ||
+        e1.y + e1.height > player.y + player.height) {
+        // e1.x - e1.width / 2 > player.x + player.width / 2 ||
+        // e1.y - e1.height / 2 > player.y + player.height / 2)) {
+            console.log("you lose the game")
+        }
     }
 
 function collisionEnemyTwo(e2, player) {
@@ -74,7 +95,6 @@ function collisionTarget(target, player) {
 }
 
 function loop() {
-    const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
     if(Keyboarder.isDown(37))
         player.x-=10;
@@ -102,13 +122,14 @@ function loop() {
     context.fillStyle = "blue"
     e1.moveY();
     e1.draw();
-    e2.moveX();
-    e2.draw();
+    collisionEnemyOne (e1, player);
+    // e2.moveX();
+    // e2.draw();
     
 }
-    collisionEnemyOne ();
-    collisionEnemyTwo ();
-    collisionTarget ();
+    
+    // collisionEnemyTwo (e2, player);
+    collisionTarget (target, player);
 
 
 
