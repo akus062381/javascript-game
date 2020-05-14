@@ -16,10 +16,10 @@ class Game {
     this.player = new Player(gameSize);
     let animate = () => {
       if (colliding(this.player, this.target)) {
-        console.log("target hit");
+        console.log("Score!");
         this.score += 10;
         let pointsTally = document.querySelector("#points-tally");
-        pointsTally.textContent = this.score;
+        pointsTally.textContent = "Score: " + this.score;
         this.target = new Target();
       }
       if (
@@ -51,11 +51,6 @@ class Game {
       requestAnimationFrame(animate);
     };
     animate();
-  }
-
-  drawScore() {
-    context.font = "16px Arial";
-    context.fillText("Score: " + score);
   }
 
   drawPlayer(context, gameSize) {
@@ -104,7 +99,7 @@ class Enemy {
   moveW() {
     this.y -= 1;
     if (this.y < 0) {
-      this.y = 500;
+      this.y = 350;
       this.x = Math.floor(Math.random() * 300);
     }
   }
